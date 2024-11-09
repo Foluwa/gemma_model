@@ -1,0 +1,51 @@
+<!-- ./app/templates/frontend.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GemmaQA Chatbot</title>
+    <style>
+        /* Add CSS styles here */
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <div id="chatBoard"></div>
+        <div class="chat__conversation-panel">
+            <div class="chat__conversation-panel__container">
+                <input id="messageInput" placeholder="Type a message..."/>
+                <button id="sendButton">Send</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const messageInput = document.getElementById("messageInput");
+            const sendButton = document.getElementById("sendButton");
+            const chatBoard = document.getElementById("chatBoard");
+
+            async function sendMessage() {
+                const userMessage = messageInput.value.trim();
+                if (!userMessage) return;
+                messageInput.value = "";
+
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ instruction: "", question: userMessage })
+                });
+                const data = await response.json();
+                const messageElem = document.createElement("div");
+                messageElem.innerHTML = `<p>User: ${userMessage}</p><p>Bot: ${data.response}</p>`;
+                chatBoard.appendChild(messageElem);
+            }
+
+            sendButton.addEventListener("click", sendMessage);
+            messageInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>
