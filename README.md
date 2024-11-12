@@ -27,7 +27,7 @@ This is a chatbot built using a fine-tuned Gemma model from Keras_NLP, served vi
 
 1. Install the dependencies:
    ```bash
-   pip install tensorflow fastapi uvicorn keras-nlp
+   pip install fastapi uvicorn
 
 
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8001 app.main:app
